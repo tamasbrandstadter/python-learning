@@ -10,12 +10,13 @@ class Add(Command):
     def __init__(self, flag, desc):
         super().__init__(flag, desc)
         self.__required_format = "You can add tasks with the format below: \n" \
-                                 "todo -a [description with spaces]_[yyyy:mm:dd hh:mm]"
-        self.__format = '%Y:%m:%d %H:%M'
+                                 "todo -a [description with spaces]_[yyyy.mm.dd hh:mm]"
+        self.__format = '%Y.%m.%d %H:%M'
 
-    def execute(self, parts, file_name):
-        desc, date = tuple(str(parts).split('_'))
-        if desc is not None and date is not None:
+    def execute(self, user_input, file_name):
+        parts = str(user_input).split('_')
+        if len(parts) > 1:
+            desc, date = tuple(parts)
             local = pytz.timezone('Europe/Paris')
             try:
                 naive = dt.strptime(date, self.__format)
@@ -25,7 +26,7 @@ class Add(Command):
                     todos.write(desc + ';0;' + str(utc_dt) + '\n')
                     print('Successfully added new todo')
             except ValueError:
-                print('Input date does not match format')
+                print('Input date does not match required format {}'.format(self.__format))
         else:
-            print('Unable to add new task description or due date missing')
+            print('Unable to add new task as description or due date is missing')
             print(self.__required_format)
