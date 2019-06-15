@@ -2,6 +2,16 @@ import random
 import tkinter as tk
 
 
+def divide_canvas(n, canvas_size):
+    if n == 1:
+        return
+
+    half = canvas_size / 2
+    canvas.create_line(0, half, canvas_size, half)
+    canvas.create_line(half, 0, half, canvas_size)
+    return divide_canvas(n / 4, half)
+
+
 def draw_line(x_cord, y_cord):
     canvas.create_line(x_cord, y_cord, 150, 150)
     canvas.create_line(y_cord, x_cord, 150, 150)
@@ -62,5 +72,7 @@ for row in range(8):
 for row in range(0, 280, 20):
     for column in (0, 280, 20):
         draw_line(row, column)
+
+divide_canvas(16, 400)
 
 root.mainloop()

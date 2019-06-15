@@ -31,7 +31,7 @@ def unique(numbers):
 
 
 def anagram(text, text2):
-    return sorted(text) == sorted(text2)
+    return sorted(text.lower()) == sorted(text2.lower())
 
 
 def palindrome(text):
